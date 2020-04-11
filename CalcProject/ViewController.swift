@@ -10,8 +10,10 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let calcView = CalculatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(calcView)
         // Do any additional setup after loading the view.
     }
 

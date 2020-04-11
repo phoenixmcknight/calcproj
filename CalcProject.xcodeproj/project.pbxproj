@@ -14,6 +14,7 @@
 		6918041C24423F9A00FC64EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6918041B24423F9A00FC64EB /* Assets.xcassets */; };
 		6918041F24423F9A00FC64EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6918041D24423F9A00FC64EB /* LaunchScreen.storyboard */; };
 		6918042A24423F9A00FC64EB /* CalcProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6918042924423F9A00FC64EB /* CalcProjectTests.swift */; };
+		6918043524424C8A00FC64EB /* CalculationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6918043424424C8A00FC64EB /* CalculationModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		6918042524423F9A00FC64EB /* CalcProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalcProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6918042924423F9A00FC64EB /* CalcProjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcProjectTests.swift; sourceTree = "<group>"; };
 		6918042B24423F9A00FC64EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6918043424424C8A00FC64EB /* CalculationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculationModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				6918041B24423F9A00FC64EB /* Assets.xcassets */,
 				6918041D24423F9A00FC64EB /* LaunchScreen.storyboard */,
 				6918042024423F9A00FC64EB /* Info.plist */,
+				6918043424424C8A00FC64EB /* CalculationModel.swift */,
 			);
 			path = CalcProject;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6918041724423F9500FC64EB /* ViewController.swift in Sources */,
+				6918043524424C8A00FC64EB /* CalculationModel.swift in Sources */,
 				6918041324423F9500FC64EB /* AppDelegate.swift in Sources */,
 				6918041524423F9500FC64EB /* SceneDelegate.swift in Sources */,
 			);

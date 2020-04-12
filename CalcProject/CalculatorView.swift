@@ -19,12 +19,14 @@ class CalculatorView: UIView {
     
     lazy var displayNumberLabel:UILabel = {
       let label = UILabel()
-        label.text = "0"
-                        label.adjustsFontSizeToFitWidth = true
-                        label.numberOfLines = 0
-                        label.font = UIFont(name: StyleGuide.FontStyle.fontName, size: StyleGuide.FontStyle.fontSize)
-                        label.textColor = StyleGuide.FontStyle.fontColor
-        label.contentMode = .right
+       
+     label.adjustsFontSizeToFitWidth = true
+     label.numberOfLines = 1
+        label.font = UIFont(name: StyleGuide.FontStyle.fontName, size: StyleGuide.FontStyle.fontSize)
+        
+        label.adjustsFontForContentSizeCategory = true
+    label.textColor = StyleGuide.FontStyle.fontColor
+        label.textAlignment = .right
                return label
     }()
     
@@ -63,6 +65,7 @@ class CalculatorView: UIView {
         super.init(frame: UIScreen.main.bounds)
         commonInit()
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -158,7 +161,11 @@ class CalculatorView: UIView {
         for operation in operationsArray {
            let uiButton = UIButton()
                              uiButton.setTitle(operation, for: .normal)
-                             uiButton.setTitleColor(StyleGuide.ButtonStyle.fontColor, for: .normal)
+                             uiButton.setTitleColor(StyleGuide.ButtonStyle.altFontColor, for: .normal)
+            
+            
+
+            
                              uiButton.titleLabel?.font = UIFont(name: StyleGuide.ButtonStyle.fontName, size: StyleGuide.ButtonStyle.altFontSize)
             uiButton.showsTouchWhenHighlighted = true
 
@@ -244,10 +251,10 @@ class CalculatorView: UIView {
     private func blankScreenViewConstraints() {
         blackScreenView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            blackScreenView.topAnchor.constraint(equalTo: self.topAnchor),
+            blackScreenView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             blackScreenView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             blackScreenView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            blackScreenView.heightAnchor.constraint(equalTo: self.heightAnchor,multiplier: 0.25)
+            blackScreenView.heightAnchor.constraint(equalTo: self.heightAnchor,multiplier: 0.20)
             
         ])
     }
@@ -256,9 +263,9 @@ class CalculatorView: UIView {
         displayNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             displayNumberLabel.heightAnchor.constraint(equalTo: blackScreenView.heightAnchor,multiplier: 0.5),
-            displayNumberLabel.trailingAnchor.constraint(equalTo: blackScreenView.trailingAnchor),
-            displayNumberLabel.leadingAnchor.constraint(equalTo: blackScreenView.leadingAnchor),
-            displayNumberLabel.bottomAnchor.constraint(equalTo: blackScreenView.bottomAnchor,constant: self.frame.height * 0.01)
+            displayNumberLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor,constant:-self.frame.height * 0.01 ),
+            displayNumberLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            displayNumberLabel.bottomAnchor.constraint(equalTo: blackScreenView.bottomAnchor,constant: -self.frame.height * 0.01)
         ])
     }
     

@@ -9,46 +9,55 @@
 import UIKit
 
 class CalculatorView: UIView {
-
+    
+    private enum ButtonType {
+        case symbol
+        case operation
+        case number
+    }
+    
+    //MARK: View Objects
+    
     lazy var blackScreenView:UIView =
         {
             let screen = UIView()
             screen.backgroundColor = .black
-           return screen
+            return screen
     }()
     
-    lazy var displayNumberLabel:UILabel = {
-      let label = UILabel()
-       
-     label.adjustsFontSizeToFitWidth = true
-     label.numberOfLines = 1
-        label.font = UIFont(name: StyleGuide.FontStyle.fontName, size: StyleGuide.FontStyle.fontSize)
-        
-        label.adjustsFontForContentSizeCategory = true
-    label.textColor = StyleGuide.FontStyle.fontColor
-        label.textAlignment = .right
-               return label
+    lazy var displayNumberLabel:UILabel =
+        {
+            let label = UILabel()
+            
+            label.adjustsFontSizeToFitWidth = true
+            label.numberOfLines = 1
+            label.font = UIFont(name: StyleGuide.FontStyle.fontName, size: StyleGuide.FontStyle.fontSize)
+            
+            label.adjustsFontForContentSizeCategory = true
+            label.textColor = StyleGuide.FontStyle.fontColor
+            label.textAlignment = .right
+            return label
     }()
     
     lazy var firstRowStackView:UIStackView =
         {
-        return UIStackView()
+            return UIStackView()
     }()
     
     lazy var secondRowStackView:UIStackView =
-          {
-          return UIStackView()
-      }()
+        {
+            return UIStackView()
+    }()
     
     lazy var thirdRowStackView:UIStackView =
-          {
-          return UIStackView()
-      }()
+        {
+            return UIStackView()
+    }()
     
     lazy var fourthRowStackView:UIStackView =
-          {
-          return UIStackView()
-      }()
+        {
+            return UIStackView()
+    }()
     
     lazy var fifthRowStackView:UIStackView =
         {
@@ -61,26 +70,24 @@ class CalculatorView: UIView {
     
     lazy var operationsButtonArray:[UIButton] = []
     
-    override init(frame:CGRect) {
+    override init(frame:CGRect)
+    {
         super.init(frame: UIScreen.main.bounds)
         commonInit()
     }
     
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func commonInit(){
-    createButtons()
-    configureStackViewss()
-    addSubviews()
-    addConstraintsToViews()
-    giveButtonsTags()
+    private func commonInit()
+    {
+        createButtons()
+        configureStackViewss()
+        addSubviews()
+        addConstraintsToViewObjects()
+        giveButtonsTags()
         
     }
     
-    private func createButtons() {
+    private func createButtons()
+    {
         createNumberButtons()
         createSymbolButtons()
         createOperationButtons()
@@ -102,122 +109,129 @@ class CalculatorView: UIView {
         addSubviewsToFifthRowStackView()
     }
     
-    private func addConstraintsToViews() {
-                blankScreenViewConstraints()
-                displayNumerLabelConstraints()
-                firstRowStackViewConstraints()
-                secondRowStackViewConstraints()
-                thirdRowStackViewConstraints()
-                fourthRowStackViewConstraints()
-                fifthRowStackViewConstraints()
+    private func addConstraintsToViewObjects()
+    {
+        blankScreenViewConstraints()
+        displayNumerLabelConstraints()
+        firstRowStackViewConstraints()
+        secondRowStackViewConstraints()
+        thirdRowStackViewConstraints()
+        fourthRowStackViewConstraints()
+        fifthRowStackViewConstraints()
         buttonConstraints()
-       }
-
-    private func createNumberButtons() {
+    }
+    
+    //MARK: Configure Buttons
+    
+    private func createNumberButtons()
+    {
         let numberArray:[Int] = [9,8,7,6,5,4,3,2,1,0]
         
-        for num in numberArray {
+        numberArray.forEach({
             let uiButton = UIButton()
-            uiButton.setTitle("\(num)", for: .normal)
-            uiButton.setTitleColor(StyleGuide.ButtonStyle.fontColor, for: .normal)
-            uiButton.titleLabel?.font = UIFont(name: StyleGuide.ButtonStyle.fontName, size: StyleGuide.ButtonStyle.fontSize)
-            uiButton.showsTouchWhenHighlighted = true
-            uiButton.layer.borderWidth = StyleGuide.ButtonStyle.borderWidth
-            uiButton.layer.borderColor = StyleGuide.ButtonStyle.borderColor
-            uiButton.backgroundColor = StyleGuide.ButtonStyle.backgroundColor
-            numberButtonArray.append(uiButton)
-        }
+            configureButtons(button: uiButton, buttonType: .number, buttonName: String($0))
+        })
         let uiButton = UIButton()
-        uiButton.setTitle(".", for: .normal)
-    uiButton.setTitleColor(StyleGuide.ButtonStyle.fontColor, for: .normal)
-        uiButton.titleLabel?.font = UIFont(name: StyleGuide.ButtonStyle.fontName, size: StyleGuide.ButtonStyle.altFontSize)
-        uiButton.showsTouchWhenHighlighted = true
-
-        uiButton.layer.borderWidth = StyleGuide.ButtonStyle.borderWidth
-                  uiButton.layer.borderColor = StyleGuide.ButtonStyle.borderColor
-                  uiButton.backgroundColor = StyleGuide.ButtonStyle.backgroundColor
-        numberButtonArray.append(uiButton)
+        
+        configureButtons(button: uiButton, buttonType: .number, buttonName: ".")
     }
-    private func createSymbolButtons() {
+    private func createSymbolButtons()
+    {
         let symbolsArray:[String] = ["AC","+/-","%"]
-        for symbol in symbolsArray {
-                  let uiButton = UIButton()
-                  uiButton.setTitle(symbol, for: .normal)
-                  uiButton.setTitleColor(StyleGuide.ButtonStyle.fontColor, for: .normal)
-                  uiButton.titleLabel?.font = UIFont(name: StyleGuide.ButtonStyle.fontName, size: StyleGuide.ButtonStyle.fontSize)
-         
-            uiButton.showsTouchWhenHighlighted = true
-
-            uiButton.layer.borderWidth = StyleGuide.ButtonStyle.borderWidth
-                             uiButton.layer.borderColor = StyleGuide.ButtonStyle.borderColor
-                             uiButton.backgroundColor = StyleGuide.ButtonStyle.altBackgroundColor
-            symbolButtonArray.append(uiButton)
-              }
+        
+        symbolsArray.forEach({
+            let uiButton = UIButton()
+            configureButtons(button: uiButton, buttonType: .symbol, buttonName: $0)
+        })
     }
     
-    private func createOperationButtons() {
+    private func createOperationButtons()
+    {
         let operationsArray:[String] = ["÷","x","-","+","="]
         
-        for operation in operationsArray {
-           let uiButton = UIButton()
-                             uiButton.setTitle(operation, for: .normal)
-                             uiButton.setTitleColor(StyleGuide.ButtonStyle.altFontColor, for: .normal)
-            
-            
-
-            
-                             uiButton.titleLabel?.font = UIFont(name: StyleGuide.ButtonStyle.fontName, size: StyleGuide.ButtonStyle.altFontSize)
-            uiButton.showsTouchWhenHighlighted = true
-
-            uiButton.layer.borderWidth = StyleGuide.ButtonStyle.borderWidth
-                             uiButton.layer.borderColor = StyleGuide.ButtonStyle.borderColor
-                             uiButton.backgroundColor = StyleGuide.ButtonStyle.operationBackgroundColor
-                       operationsButtonArray.append(uiButton)
-        }
+        operationsArray.forEach({
+            let uiButton = UIButton()
+            configureButtons(button: uiButton, buttonType: .operation, buttonName: $0)
+        })
     }
     
-    private func giveButtonsTags() {
+    private func giveButtonsTags()
+    {
         var count = 0
-        
         let buttonArray = firstRowStackView.arrangedSubviews + secondRowStackView.arrangedSubviews + thirdRowStackView.arrangedSubviews + fourthRowStackView.arrangedSubviews + fifthRowStackView.arrangedSubviews
         
         for button in buttonArray {
-            print(button)
             button.tag = count
             count += 1
         }
     }
     
-    private func configureStackViewss() {
-          let stackArray:[UIStackView] = [firstRowStackView,secondRowStackView,thirdRowStackView,fourthRowStackView,fifthRowStackView]
-          
-          for stack in stackArray {
-                   stack.alignment = .fill
-              stack.distribution = .fillEqually
-                     stack.spacing = 0
-                     stack.axis = .horizontal
-          }
-          fifthRowStackView.distribution = .fill
-      }
-    
-    
-    
-    private func addSubviewsToStackViews() {
-    addSubviewsToFirstRowStackView()
-    addSubviewsToSecondRowStackView()
-    addSubviewsToThirdRowStackView()
-    addSubviewsToFourthRowStackView()
-    addSubviewsToFifthRowStackView()
+    private func configureButtons(button:UIButton,buttonType:ButtonType,buttonName:String)
+    {
+        button.setTitle(buttonName, for: .normal)
+        button.showsTouchWhenHighlighted = true
+        button.layer.borderWidth = StyleGuide.ButtonStyle.borderWidth
+        button.layer.borderColor = StyleGuide.ButtonStyle.borderColor
+        button.titleLabel?.font = UIFont(name: StyleGuide.ButtonStyle.fontName, size: StyleGuide.ButtonStyle.fontSize)
+        button.setTitleColor(StyleGuide.ButtonStyle.fontColor, for: .normal)
+        
+        
+        switch buttonType {
+            
+        case .symbol:
+            
+            button.backgroundColor = StyleGuide.ButtonStyle.altBackgroundColor
+            symbolButtonArray.append(button)
+            
+        case .operation:
+            
+            button.titleLabel?.font = UIFont(name: StyleGuide.ButtonStyle.fontName, size: StyleGuide.ButtonStyle.altFontSize)
+            button.setTitleColor(StyleGuide.ButtonStyle.altFontColor, for: .normal)
+            button.backgroundColor = StyleGuide.ButtonStyle.operationBackgroundColor
+            operationsButtonArray.append(button)
+            
+        case .number:
+            
+            button.backgroundColor = StyleGuide.ButtonStyle.backgroundColor
+            numberButtonArray.append(button)
+            
+        }
     }
     
-    private func addSubviewsToFirstRowStackView() {
+    //MARK: Configure StackViews
+    
+    private func configureStackViewss()
+    {
+        let stackArray:[UIStackView] = [firstRowStackView,secondRowStackView,thirdRowStackView,fourthRowStackView,fifthRowStackView]
+        
+        for stack in stackArray {
+            stack.alignment = .fill
+            stack.distribution = .fillEqually
+            stack.spacing = 0
+            stack.axis = .horizontal
+        }
+        fifthRowStackView.distribution = .fill
+    }
+    
+    private func addSubviewsToStackViews()
+    {
+        addSubviewsToFirstRowStackView()
+        addSubviewsToSecondRowStackView()
+        addSubviewsToThirdRowStackView()
+        addSubviewsToFourthRowStackView()
+        addSubviewsToFifthRowStackView()
+    }
+    
+    private func addSubviewsToFirstRowStackView()
+    {
         firstRowStackView.addArrangedSubview(symbolButtonArray[0])
         firstRowStackView.addArrangedSubview(symbolButtonArray[1])
         firstRowStackView.addArrangedSubview(symbolButtonArray[2])
         firstRowStackView.addArrangedSubview(operationsButtonArray[0])
     }
     
-    private func addSubviewsToSecondRowStackView() {
+    private func addSubviewsToSecondRowStackView()
+    {
         secondRowStackView.addArrangedSubview(numberButtonArray[2])
         secondRowStackView.addArrangedSubview(numberButtonArray[1])
         secondRowStackView.addArrangedSubview(numberButtonArray[0])
@@ -232,34 +246,36 @@ class CalculatorView: UIView {
         thirdRowStackView.addArrangedSubview(operationsButtonArray[2])
     }
     
-    private func addSubviewsToFourthRowStackView() {
+    private func addSubviewsToFourthRowStackView()
+    {
         fourthRowStackView.addArrangedSubview(numberButtonArray[8])
         fourthRowStackView.addArrangedSubview(numberButtonArray[7])
         fourthRowStackView.addArrangedSubview(numberButtonArray[6])
         fourthRowStackView.addArrangedSubview(operationsButtonArray[3])
     }
     
-    private func addSubviewsToFifthRowStackView() {
+    private func addSubviewsToFifthRowStackView()
+    {
         fifthRowStackView.addArrangedSubview(numberButtonArray[9])
         fifthRowStackView.addArrangedSubview(numberButtonArray[10])
-        
         fifthRowStackView.addArrangedSubview(operationsButtonArray[4])
     }
     
-  
+    //MARK: View Constraints
     
-    private func blankScreenViewConstraints() {
+    private func blankScreenViewConstraints()
+    {
         blackScreenView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             blackScreenView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             blackScreenView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             blackScreenView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             blackScreenView.heightAnchor.constraint(equalTo: self.heightAnchor,multiplier: 0.20)
-            
         ])
     }
     
-    private func displayNumerLabelConstraints() {
+    private func displayNumerLabelConstraints()
+    {
         displayNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             displayNumberLabel.heightAnchor.constraint(equalTo: blackScreenView.heightAnchor,multiplier: 0.5),
@@ -269,79 +285,69 @@ class CalculatorView: UIView {
         ])
     }
     
-    private func firstRowStackViewConstraints() {
+    private func firstRowStackViewConstraints()
+    {
         firstRowStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        firstRowStackView.topAnchor.constraint(equalTo: blackScreenView.bottomAnchor),
-        firstRowStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-        firstRowStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-        firstRowStackView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.14)
+            firstRowStackView.topAnchor.constraint(equalTo: blackScreenView.bottomAnchor),
+            firstRowStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            firstRowStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            firstRowStackView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.14)
         ])
     }
     
-    private func secondRowStackViewConstraints() {
+    private func secondRowStackViewConstraints()
+    {
         secondRowStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
-            secondRowStackView.topAnchor.constraint(equalTo: firstRowStackView.bottomAnchor),
-            secondRowStackView.centerXAnchor.constraint(equalTo: firstRowStackView.centerXAnchor),
-            secondRowStackView.heightAnchor.constraint(equalTo: firstRowStackView.heightAnchor),
-            
-            secondRowStackView.widthAnchor.constraint(equalTo: firstRowStackView.widthAnchor)
-        ])
+        genericStackViewConstraints(stackView: secondRowStackView, stackViewAboveCurrentStackView: firstRowStackView)
     }
     
-    private func thirdRowStackViewConstraints() {
+    private func thirdRowStackViewConstraints()
+    {
         thirdRowStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
-            thirdRowStackView.topAnchor.constraint(equalTo: secondRowStackView.bottomAnchor),
-            thirdRowStackView.centerXAnchor.constraint(equalTo: firstRowStackView.centerXAnchor),
-            thirdRowStackView.heightAnchor.constraint(equalTo: firstRowStackView.heightAnchor),
-            
-            thirdRowStackView.widthAnchor.constraint(equalTo: firstRowStackView.widthAnchor)
-        ])
+        genericStackViewConstraints(stackView: thirdRowStackView, stackViewAboveCurrentStackView: secondRowStackView)
     }
     
-    private func fourthRowStackViewConstraints() {
+    private func fourthRowStackViewConstraints()
+    {
         fourthRowStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
-            fourthRowStackView.topAnchor.constraint(equalTo: thirdRowStackView.bottomAnchor),
-            fourthRowStackView.centerXAnchor.constraint(equalTo: firstRowStackView.centerXAnchor),
-            fourthRowStackView.heightAnchor.constraint(equalTo: firstRowStackView.heightAnchor),
-            fourthRowStackView.widthAnchor.constraint(equalTo: firstRowStackView.widthAnchor)
-        ])
+        genericStackViewConstraints(stackView: fourthRowStackView, stackViewAboveCurrentStackView: thirdRowStackView)
     }
     
-    private func fifthRowStackViewConstraints() {
+    private func fifthRowStackViewConstraints()
+    {
         fifthRowStackView.translatesAutoresizingMaskIntoConstraints = false
-        
+        genericStackViewConstraints(stackView: fifthRowStackView, stackViewAboveCurrentStackView: fourthRowStackView)
+    }
+    
+    private func genericStackViewConstraints(stackView:UIView,stackViewAboveCurrentStackView:UIView)
+    {
         NSLayoutConstraint.activate([
-            fifthRowStackView.topAnchor.constraint(equalTo: fourthRowStackView.bottomAnchor),
-            fifthRowStackView.centerXAnchor.constraint(equalTo: firstRowStackView.centerXAnchor),
-            fifthRowStackView.heightAnchor.constraint(equalTo: firstRowStackView.heightAnchor),
-            fifthRowStackView.widthAnchor.constraint(equalTo: firstRowStackView.widthAnchor)
+            stackView.topAnchor.constraint(equalTo: stackViewAboveCurrentStackView.bottomAnchor),
+            stackView.centerXAnchor.constraint(equalTo: firstRowStackView.centerXAnchor),
+            stackView.heightAnchor.constraint(equalTo: firstRowStackView.heightAnchor),
+            stackView.widthAnchor.constraint(equalTo: firstRowStackView.widthAnchor)
         ])
     }
     
-    private func buttonConstraints() {
-        for button in numberButtonArray {
-          
-            if button.titleLabel?.text == "0" {
-                button.widthAnchor.constraint(equalTo: firstRowStackView.widthAnchor, multiplier: 0.5).isActive = true
+    private func buttonConstraints()
+    {
+        let buttonArray = symbolButtonArray + operationsButtonArray + numberButtonArray
+        
+        buttonArray.forEach({
+            if $0.titleLabel?.text == "0" {
+                $0.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5).isActive = true
             } else {
-                  button.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.25).isActive = true
+                $0.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.25).isActive = true
             }
-        }
-        
-        for button in symbolButtonArray {
-              button.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.25).isActive = true
-        }
-        
-        for button in operationsButtonArray {
-              button.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.25).isActive = true
-        }
+        })
     }
-    
+    required init?(coder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
+

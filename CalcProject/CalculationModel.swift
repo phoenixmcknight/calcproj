@@ -10,88 +10,86 @@ import Foundation
 
 struct CalculationModel {
     private var displayedNumber:Double = 0
-    private var selectedNumber:Double?
-    private var currentOperation:(Double,Double) -> Double
-    var subtractionClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-        return displayedNumberTwo - selectedNumberTwo
+    private var previousNumber:Double? = nil
+    private var currentOperation:((Double,Double) -> Double)? 
+    
+    public var  setCurrentOperation:EnumOperations = .none {
+        didSet {
+            switch setCurrentOperation {
+            case .addition:
+                currentOperation = additionClosure
+            case .multiplication:
+                currentOperation = multiplicationClosure
+            case .division:
+                currentOperation = divisionClosure
+            case .subtraction:
+                currentOperation = subtractionClosure
+                
+            case .none:
+                currentOperation = nil
+            }
+        }
     }
-    var additionClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-           return displayedNumberTwo + selectedNumberTwo
+    
+  private  var subtractionClosure = { (displayedNumberTwo:Double,previousNumber:Double) -> Double in
+        return displayedNumberTwo - previousNumber
+    }
+  private  var additionClosure = { (displayedNumberTwo:Double,previousNumber:Double) -> Double in
+           return displayedNumberTwo + previousNumber
        }
-    var divisionClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-           return displayedNumberTwo / selectedNumberTwo
+     private var divisionClosure = { (displayedNumberTwo:Double,previousNumber:Double) -> Double in
+           return displayedNumberTwo / previousNumber
        }
-    var multiplicationClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-           return displayedNumberTwo * selectedNumberTwo
+  private  var multiplicationClosure = { (displayedNumberTwo:Double,previousNumber:Double) -> Double in
+           return displayedNumberTwo * previousNumber
        }
 
     public mutating func updateDisplayedNumber(currentDisplayedNumber:Double) {
         displayedNumber = currentDisplayedNumber
     }
 
-    public mutating func updateSelectedNumber(currentSelectedNumber:Double?) {
-        selectedNumber = currentSelectedNumber
+    public mutating func updatePreviousNumber(currentSelectedNumber:Double?) {
+        previousNumber = currentSelectedNumber
     }
+    
 
-    public mutating func returnDisplayedNumber() -> Double {
+    public func returnDisplayedNumber() -> Double {
         return displayedNumber
     }
-
-    public mutating func returnSelectedNumber() -> Double? {
-        return selectedNumber
+    
+    public mutating func resetPreviousNumber() {
+        previousNumber = nil
     }
+    
+    public mutating func executeOperation(operation: (Double,Double) -> Double) {
+       updateDisplayedNumber(currentDisplayedNumber: operation(previousNumber!, displayedNumber))
+        previousNumber = displayedNumber
+    }
+    
+    public func returnCurrentOperation() -> ((Double,Double) -> Double)? {
+        return currentOperation
+    }
+
 
     public mutating func clearAll() {
         displayedNumber = 0
-        selectedNumber = nil
-    }
-    
-    public mutating func executeOperation(currentClosure:@escaping (Double,Double) -> Double) {
-        currentOperation = currentClosure
+        previousNumber = nil
+        setCurrentOperation = .none
     }
 
 }
-//class CalculationModel {
-//    private var displayedNumber:Double = 0
-//    private var selectedNumber:Double?
-//    private var currentOperation:() -> Double
-//
-//    var subtractionClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-//        return displayedNumberTwo - selectedNumberTwo
-//    }
-//    var additionClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-//           return displayedNumberTwo + selectedNumberTwo
-//       }
-//    var divisionClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-//           return displayedNumberTwo / selectedNumberTwo
-//       }
-//    var multiplicationClosure = { (displayedNumberTwo:Double,selectedNumberTwo:Double) -> Double in
-//           return displayedNumberTwo * selectedNumberTwo
-//       }
-//
-//    public func updateDisplayedNumber(currentDisplayedNumber:Double) {
-//        displayedNumber = currentDisplayedNumber
-//    }
-//
-//    public func updateSelectedNumber(currentSelectedNumber:Double?) {
-//        selectedNumber = currentSelectedNumber
-//    }
-//
-//    public func returnDisplayedNumber() -> Double {
-//        return displayedNumber
-//    }
-//
-//    public func returnSelectedNumber() -> Double? {
-//        return selectedNumber
-//    }
-//
-//    public func clearAll() {
-//        displayedNumber = 0
-//        selectedNumber = nil
-//    }
-//
-//    public func executeOperation() {
-//        currentOperation = additionClosure
-//    }
-//
-//}
+
+enum EnumOperations:String {
+    case addition
+    case multiplication
+    case division
+    case subtraction
+    case none
+}
+
+enum EnumSymbols:String {
+    case percent
+    case negativePositive
+    case clear
+    case allClear
+}

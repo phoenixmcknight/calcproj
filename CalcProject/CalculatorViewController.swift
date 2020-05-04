@@ -33,7 +33,6 @@ class CalculatorViewController: UIViewController {
         switch sender.tag {
         case 0: // clear and allClear
             sender.titleLabel?.text == "AC" ?  handleSymbolButtonPressed(symbol: .allClear) :  handleSymbolButtonPressed(symbol: .clear)
-            
         case 1: // negative / positive
             
             handleSymbolButtonPressed(symbol: .negativePositive)
@@ -41,32 +40,14 @@ class CalculatorViewController: UIViewController {
             handleSymbolButtonPressed(symbol: .percent)
         case 3: // divide
             handleOperationButtonPressed(operation: .division, button: sender)
-        case 4: // 7
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
-        case 5: // 8
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
-        case 6: // 9
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
         case 7: // multiply
             handleOperationButtonPressed(operation: .multiplication, button: sender)
-        case 8: // 4
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
-        case 9: // 5
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
-        case 10: // 6
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
         case 11: // subtraction
             handleOperationButtonPressed(operation: .subtraction, button: sender)
-        case 12: // 1
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
-        case 13: // 2
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
-        case 14: // 3
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
+       
         case 15: // addition
             handleOperationButtonPressed(operation: .addition, button: sender)
-        case 16: // 0
-            handleNumberButtonPressed(number: sender.titleLabel?.text)
+       
         case 17: // .
             if calculatorIsInUse != true {
                 guard !(calcView.displayNumberLabel.text?.contains(".") ?? false) else {return}
@@ -75,7 +56,7 @@ class CalculatorViewController: UIViewController {
         case 18: // equals
             handleEqualButtonPressed()
         default:
-            break
+             handleNumberButtonPressed(number: sender.titleLabel?.text)
         }
     }
     
